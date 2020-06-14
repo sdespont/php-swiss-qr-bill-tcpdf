@@ -1,0 +1,19 @@
+{
+    "name": "sdepsont/swiss-qr-bill-tcpdf",
+    "description": "A PHP library extends sprain/swiss-qr-bill to produce PDF",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.1",
+        "sprain/swiss-qr-bill": "^2.8.1",
+        "tecnickcom/tcpdf": "^6.3"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sdespont\\SwissQrBillTcpdf\\": "src"
+        }
+    }
+}
