@@ -1,5 +1,5 @@
 {
-    "name": "sdepsont/php-swiss-qr-bill-tcpdf",
+    "name": "sdespont/php-swiss-qr-bill-tcpdf",
     "description": "A PHP library extends sprain/swiss-qr-bill to produce PDF",
     "type": "library",
     "license": "MIT",
