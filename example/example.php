@@ -110,4 +110,7 @@ $output = new TcpdfOutput($qrBill, 'en');
 $output->setTcPdf($tcPdf);
 $output->setPrintable(true)->getPaymentPart();
 
-$tcPdf->Output(__DIR__ . "/tcpdf_example.pdf", 'F');
+$examplePath = __DIR__ . "/tcpdf_example.pdf";
+$tcPdf->Output($examplePath, 'F');
+
+print "PDF examples created here : ".$examplePath;

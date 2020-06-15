@@ -10,10 +10,10 @@ A PHP library to extend ```sprain/php-swiss-qr-bill``` in order to create PDF pa
 ## Getting started
 
 ```
-composer require sdespont/swiss-qr-bill-tcpdf
+composer require sdespont/php-swiss-qr-bill-tcpdf
 ```
 
-Then have a look at [example/example.php](example/example.php).
+Then have a look at [example/example.php](example/example.php), and check out how to create mass-mailing QR-Bill document with TCPDF library.
 
 
 ## Main project
