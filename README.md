@@ -1,6 +1,6 @@
 # Swiss QR Bill
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sprain/php-swiss-qr-bill/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sprain/php-swiss-qr-bill/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sdepsont/php-swiss-qr-bill-tcpdf/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sdespont/php-swiss-qr-bill-tcpdf/?branch=master)
 
 A PHP library to extend ```sprain/php-swiss-qr-bill``` in order to create PDF payment slips with TCPDF library.
 

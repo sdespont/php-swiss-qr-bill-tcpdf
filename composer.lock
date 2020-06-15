@@ -309,16 +309,16 @@
         },
         {
             "name": "sprain/swiss-qr-bill",
-            "version": "v2.8.1",
+            "version": "v2.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sprain/php-swiss-qr-bill.git",
-                "reference": "4bfb5e0f63c36b1d49b385296adf378a87e391e6"
+                "reference": "21c3edad3ff4314f61c48e8484b726fb82ca84fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sprain/php-swiss-qr-bill/zipball/4bfb5e0f63c36b1d49b385296adf378a87e391e6",
-                "reference": "4bfb5e0f63c36b1d49b385296adf378a87e391e6",
+                "url": "https://api.github.com/repos/sprain/php-swiss-qr-bill/zipball/21c3edad3ff4314f61c48e8484b726fb82ca84fc",
+                "reference": "21c3edad3ff4314f61c48e8484b726fb82ca84fc",
                 "shasum": ""
             },
             "require": {
@@ -353,7 +353,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-06-10T07:24:19+00:00"
+            "time": "2020-06-14T16:19:57+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",

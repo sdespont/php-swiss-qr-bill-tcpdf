@@ -1,5 +1,6 @@
 <?php
 
+use Sdespont\SwissQrBillTcpdf\TcpdfOutput;
 use Sprain\SwissQrBill as QrBill;
 use Sprain\SwissQrBill\DataGroup\Element\AdditionalInformation;
 use Sprain\SwissQrBill\DataGroup\Element\AlternativeScheme;
@@ -17,12 +18,14 @@ $qrBill->setCreditor(
         'Rue du Lac 1268',
         '2501 Biel',
         'CH'
-    ));
+    )
+);
 
 $qrBill->setCreditorInformation(
     QrBill\DataGroup\Element\CreditorInformation::create(
         'CH4431999123000889012' // Note that this is a special QR-IBAN which are only available since of June 2020
-    ));
+    )
+);
 
 // Add debtor information
 // Who has to pay the invoice? This part is optional.
@@ -37,7 +40,8 @@ $qrBill->setUltimateDebtor(
         '9400',
         'Rorschach',
         'CH'
-    ));
+    )
+);
 
 // Add payment amount information
 // What amount is to be paid?
@@ -45,7 +49,8 @@ $qrBill->setPaymentAmountInformation(
     QrBill\DataGroup\Element\PaymentAmountInformation::create(
         'CHF',
         2500.25
-    ));
+    )
+);
 
 // Add payment reference
 // This is what you will need to identify incoming payments.
@@ -58,7 +63,8 @@ $qrBill->setPaymentReference(
     QrBill\DataGroup\Element\PaymentReference::create(
         QrBill\DataGroup\Element\PaymentReference::TYPE_QR,
         $referenceNumber
-    ));
+    )
+);
 
 // Add additional information about the payment
 $additionalInformation = AdditionalInformation::create('Invoice 1234568');
@@ -73,22 +79,28 @@ $tcPdf = new TCPDF('P', 'mm', 'A4', true, 'ISO-8859-1');
 $tcPdf->setPrintHeader(false);
 $tcPdf->setPrintFooter(false);
 
-// Page 1
+// Page 1 : ISR standard
 $tcPdf->AddPage();
-$output = new \Sdespont\SwissQrBillTcpdf\TcpdfOutput($qrBill, 'fr');
+$output = new TcpdfOutput($qrBill, 'en');
 $output->setTcPdf($tcPdf);
 $output->setPrintable(true)->getPaymentPart();
 
-// Page 2
+// Page 2 : 0CHF
 $tcPdf->AddPage();
-$qrBill->setPaymentAmountInformation(
-    QrBill\DataGroup\Element\PaymentAmountInformation::create(
-        'CHF',
-        null
-    ));
-$output = new \Sdespont\SwissQrBillTcpdf\TcpdfOutput($qrBill, 'en');
+$additionalInformation = AdditionalInformation::create(QrBill\PaymentPart\Translation\Translation::get('doNotUseForPayment', 'en'));
+$qrBill->setAdditionalInformation($additionalInformation);
+$qrBill->setPaymentAmountInformation(QrBill\DataGroup\Element\PaymentAmountInformation::create('CHF', 0));
+$output = new TcpdfOutput($qrBill, 'en');
 $output->setTcPdf($tcPdf);
 $output->setPrintable(true)->getPaymentPart();
 
-$tcPdf->Output(__DIR__ ."/tcpdf_example.pdf", 'F');
+// Page 3 ISR+
+$tcPdf->AddPage();
+$additionalInformation = AdditionalInformation::create("Thanks for your donation", null);
+$qrBill->setAdditionalInformation($additionalInformation);
+$qrBill->setPaymentAmountInformation(QrBill\DataGroup\Element\PaymentAmountInformation::create('CHF', 0));
+$output = new TcpdfOutput($qrBill, 'en');
+$output->setTcPdf($tcPdf);
+$output->setPrintable(true)->getPaymentPart();
 
+$tcPdf->Output(__DIR__ . "/tcpdf_example.pdf", 'F');
