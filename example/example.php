@@ -80,15 +80,15 @@ $output->setTcPdf($tcPdf);
 $output->setPrintable(true)->getPaymentPart();
 
 // Page 2
-//$tcPdf->AddPage();
-//$qrBill->setPaymentAmountInformation(
-//    QrBill\DataGroup\Element\PaymentAmountInformation::create(
-//        'CHF',
-//        0
-//    ));
-//$output = new \Sdespont\SwissQrBillTcpdf\TcpdfOutput($qrBill, 'fr');
-//$output->setTcPdf($tcPdf);
-//$output->setPrintable(true)->getPaymentPart();
+$tcPdf->AddPage();
+$qrBill->setPaymentAmountInformation(
+    QrBill\DataGroup\Element\PaymentAmountInformation::create(
+        'CHF',
+        null
+    ));
+$output = new \Sdespont\SwissQrBillTcpdf\TcpdfOutput($qrBill, 'en');
+$output->setTcPdf($tcPdf);
+$output->setPrintable(true)->getPaymentPart();
 
 $tcPdf->Output(__DIR__ ."/tcpdf_example.pdf", 'F');
 

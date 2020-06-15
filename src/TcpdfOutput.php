@@ -19,6 +19,7 @@ final class TcpdfOutput extends AbstractOutput implements OutputInterface
     private const TCPDF_BORDER = 0;
     private const TCPDF_ALIGN_BELOW = 2;
     private const TCPDF_ALIGN_LEFT = 'L';
+    private const TCPDF_ALIGN_RIGHT = 'R';
     private const TCPDF_MULTILINE_MIN_SIZE = 2;
     private const TCPDF_FONT = 'Helvetica';
     private const TCPDF_LEFT_CELL_HEIGHT_RATIO_COMMON = 1.2;
@@ -110,8 +111,8 @@ final class TcpdfOutput extends AbstractOutput implements OutputInterface
 
         // Acceptance section
         $this->tcpdf->SetFont(self::TCPDF_FONT, 'B', 6);
-        $this->tcpdf->SetXY(41, 273);
-        $this->tcpdf->Cell(20, 0, Translation::get('acceptancePoint', $this->language), self::TCPDF_BORDER);
+        $this->tcpdf->SetXY($x, 273);
+        $this->tcpdf->Cell(54, 0, Translation::get('acceptancePoint', $this->language), self::TCPDF_BORDER, self::TCPDF_ALIGN_BELOW, self::TCPDF_ALIGN_RIGHT);
     }
 
     /**
@@ -215,9 +216,9 @@ final class TcpdfOutput extends AbstractOutput implements OutputInterface
             $this->tcpdf->SetLineStyle(array('width' => 0.1, 'dash' => 4, 'color' => array(0, 0, 0)));
             $this->tcpdf->Line(2, 193, 208, 191);
             $this->tcpdf->Line(62, 193, 62, 296);
-            $this->tcpdf->SetFont(self::TCPDF_FONT, '', 8);
-            $this->tcpdf->SetXY(4, 185);
-            $this->tcpdf->Cell(0, 0, Translation::get('separate', $this->language), self::TCPDF_BORDER, '', 'C');
+            $this->tcpdf->SetFont(self::TCPDF_FONT, '', 7);
+            $this->tcpdf->SetXY(self::TCPDF_RIGHT_PART_X, 188);
+            $this->tcpdf->Cell(0, 0, Translation::get('separate', $this->language), self::TCPDF_BORDER);
         }
     }
 
@@ -244,8 +245,48 @@ final class TcpdfOutput extends AbstractOutput implements OutputInterface
         }
 
         if ($element instanceof Placeholder) {
+            $this->tcpdf->SetLineStyle(array('width' => 0.3, 'dash' => 0, 'color' => array(0, 0, 0)));
+
+            $lineLength = 3;
+
             // Not implemented
-            //throw new \Exception("Not yet implemented");
+            if ($isReceiptPart) {
+                $boxLeftPos = 27;
+                $boxHeightPos = self::TCPDF_CURRENCY_AMOUNT_Y+2;
+                $boxHeight = 10;
+                $boxWidth = 30;
+                $boxRightPos = $boxLeftPos+$boxWidth;
+            } else {
+                $boxLeftPos = 77;
+                $boxHeightPos = 265;
+                $boxHeight = 15;
+                $boxWidth = 40;
+                $boxRightPos = $boxLeftPos+$boxWidth;
+            }
+
+            // Top left
+            $tlx = $boxLeftPos;
+            $tly = $boxHeightPos;
+            $this->tcpdf->Line($tlx, $tly, $tlx+$lineLength, $tly);
+            $this->tcpdf->Line($tlx, $tly, $tlx, $tly+$lineLength);
+
+            // Top right
+            $trx = $boxRightPos;
+            $try = $boxHeightPos;
+            $this->tcpdf->Line($trx, $try, $trx-$lineLength, $try);
+            $this->tcpdf->Line($trx, $try, $trx, $try+$lineLength);
+
+            // Bottom left
+            $blx = $boxLeftPos;
+            $bly = $boxHeightPos+$boxHeight;
+            $this->tcpdf->Line($blx, $bly, $blx+$lineLength, $bly);
+            $this->tcpdf->Line($blx, $bly, $blx, $bly-$lineLength);
+
+            // Bottom right
+            $brx = $boxRightPos;
+            $bry = $boxHeightPos+$boxHeight;
+            $this->tcpdf->Line($brx, $bry, $brx-$lineLength, $bry);
+            $this->tcpdf->Line($brx, $bry, $brx, $bry-$lineLength);
         }
     }
 }
