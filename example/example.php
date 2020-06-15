@@ -66,26 +66,33 @@ $qrBill->setPaymentReference(
     )
 );
 
+// Example with TCPDF
+$tcPdf = new TCPDF('P', 'mm', 'A4', true, 'ISO-8859-1');
+$tcPdf->setPrintHeader(false);
+$tcPdf->setPrintFooter(false);
+
+// Page 1 : ISR standard minimal
+$tcPdf->AddPage();
+$output = new TcpdfOutput($qrBill, 'en');
+$output->setTcPdf($tcPdf);
+$output->setPrintable(true)->getPaymentPart();
+
+// Page 2 : ISR standard with options
+$tcPdf->AddPage();
+$output = new TcpdfOutput($qrBill, 'en');
+$output->setTcPdf($tcPdf);
+
 // Add additional information about the payment
-$additionalInformation = AdditionalInformation::create('Invoice 1234568');
+$additionalInformation = AdditionalInformation::create('Invoice 1234568', "Billing information");
 $qrBill->setAdditionalInformation($additionalInformation);
 
 // Add alternative scheme
 $qrBill->addAlternativeScheme(AlternativeScheme::create('Name AV1: UV;UltraPay005;12345'));
 $qrBill->addAlternativeScheme(AlternativeScheme::create('Name AV2: XY;XYService;54321'));
 
-// Example with TCPDF
-$tcPdf = new TCPDF('P', 'mm', 'A4', true, 'ISO-8859-1');
-$tcPdf->setPrintHeader(false);
-$tcPdf->setPrintFooter(false);
-
-// Page 1 : ISR standard
-$tcPdf->AddPage();
-$output = new TcpdfOutput($qrBill, 'en');
-$output->setTcPdf($tcPdf);
 $output->setPrintable(true)->getPaymentPart();
 
-// Page 2 : 0CHF
+// Page 3 : 0CHF
 $tcPdf->AddPage();
 $additionalInformation = AdditionalInformation::create(QrBill\PaymentPart\Translation\Translation::get('doNotUseForPayment', 'en'));
 $qrBill->setAdditionalInformation($additionalInformation);
@@ -94,7 +101,7 @@ $output = new TcpdfOutput($qrBill, 'en');
 $output->setTcPdf($tcPdf);
 $output->setPrintable(true)->getPaymentPart();
 
-// Page 3 ISR+
+// Page 4 ISR+
 $tcPdf->AddPage();
 $additionalInformation = AdditionalInformation::create("Thanks for your donation", null);
 $qrBill->setAdditionalInformation($additionalInformation);
