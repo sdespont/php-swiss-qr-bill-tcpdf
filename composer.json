@@ -1,6 +1,6 @@
 {
     "name": "sdespont/php-swiss-qr-bill-tcpdf",
-    "description": "A PHP library extends sprain/swiss-qr-bill to produce PDF",
+    "description": "A very small PHP library to extend sprain/swiss-qr-bill in order to produce mass-mailing PDF document using TCPDF library",
     "type": "library",
     "license": "MIT",
     "require": {
