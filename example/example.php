@@ -71,18 +71,20 @@ $tcPdf = new TCPDF('P', 'mm', 'A4', true, 'ISO-8859-1');
 $tcPdf->setPrintHeader(false);
 $tcPdf->setPrintFooter(false);
 
+$qrCodeImageFormat = QrBill\QrCode\QrCode::FILE_FORMAT_SVG;
+
 // Page 1 : 2 ISR standard minimal in the same page
 // ------------------------------------------------
 $tcPdf->AddPage();
-$output = new TcPdfOutput($qrBill, 'fr', $tcPdf);
+$output = new TcPdfOutput($qrBill, 'fr', $tcPdf, $qrCodeImageFormat);
 $output->setPrintable(true)->getPaymentPart();
-$output = new TcPdfOutput($qrBill, 'en', $tcPdf, 0, -110);
+$output = new TcPdfOutput($qrBill, 'en', $tcPdf, $qrCodeImageFormat, 0, -110);
 $output->setPrintable(true)->getPaymentPart();
 
 // Page 2 : ISR standard with options
 // ----------------------------------
 $tcPdf->AddPage();
-$output = new TcPdfOutput($qrBill, 'en', $tcPdf);
+$output = new TcPdfOutput($qrBill, 'en', $tcPdf, $qrCodeImageFormat);
 
 // Add additional information about the payment
 $additionalInformation = AdditionalInformation::create('Invoice 1234568', "Billing information");
@@ -100,7 +102,7 @@ $tcPdf->AddPage();
 $additionalInformation = AdditionalInformation::create(QrBill\PaymentPart\Translation\Translation::get('doNotUseForPayment', 'en'));
 $qrBill->setAdditionalInformation($additionalInformation);
 $qrBill->setPaymentAmountInformation(QrBill\DataGroup\Element\PaymentAmountInformation::create('CHF', 0));
-$output = new TcPdfOutput($qrBill, 'en', $tcPdf);
+$output = new TcPdfOutput($qrBill, 'en', $tcPdf, $qrCodeImageFormat);
 $output->setPrintable(true)->getPaymentPart();
 
 // Page 4 ISR+ (without amount)
@@ -109,7 +111,7 @@ $tcPdf->AddPage();
 $additionalInformation = AdditionalInformation::create("Thanks for your donation", null);
 $qrBill->setAdditionalInformation($additionalInformation);
 $qrBill->setPaymentAmountInformation(QrBill\DataGroup\Element\PaymentAmountInformation::create('CHF', null));
-$output = new TcPdfOutput($qrBill, 'en', $tcPdf);
+$output = new TcPdfOutput($qrBill, 'en', $tcPdf, $qrCodeImageFormat);
 $output->setPrintable(true)->getPaymentPart();
 
 $examplePath = __DIR__ . "/tcpdf_example.pdf";

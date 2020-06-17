@@ -55,6 +55,9 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
     /* @var int $offsetY */
     private $offsetY;
 
+    /* @var string $qrCodeImageFormat */
+    private $qrCodeImageFormat;
+
     /**
      * TcPdfOutput constructor.
      *
@@ -63,11 +66,13 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
      * @param TCPDF $tcPdf
      * @param int $offsetX
      * @param int $offsetY
+     * @param string $qrCodeImageFormat
      */
     public function __construct(
         QrBill $qrBill,
         string $language,
         TCPDF $tcPdf,
+        string $qrCodeImageFormat = QrCode::FILE_FORMAT_SVG,
         int $offsetX = 0,
         int $offsetY = 0
     ) {
@@ -75,6 +80,7 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
         $this->tcPdf = $tcPdf;
         $this->offsetX = $offsetX;
         $this->offsetY = $offsetY;
+        $this->qrCodeImageFormat = $qrCodeImageFormat;
     }
 
     /**
@@ -110,9 +116,23 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
     private function addSwissQrCodeImage(): void
     {
         $qrCode = $this->getQrCode();
-        $qrCode->setWriterByExtension(QrCode::FILE_FORMAT_PNG);
+
+        switch($this->qrCodeImageFormat) {
+            case QrCode::FILE_FORMAT_PNG:
+                $format = QrCode::FILE_FORMAT_PNG;
+                $method = "Image";
+                break;
+            case QrCode::FILE_FORMAT_SVG:
+            default:
+                $format = QrCode::FILE_FORMAT_SVG;
+                $method = "ImageSVG";
+                break;
+        }
+
+        $qrCode->setWriterByExtension($format);
         $img = base64_decode(preg_replace('#^data:image/[^;]+;base64,#', '', $qrCode->writeDataUri()));
-        $this->tcPdf->Image("@".$img, self::TCPDF_RIGHT_PART_X + 1 + $this->offsetX, 209.5 + $this->offsetY, 46, 46);
+        $this->tcPdf->$method("@".$img, self::TCPDF_RIGHT_PART_X + 1 + $this->offsetX, 209.5 + $this->offsetY, 46, 46);
+
     }
 
     /**
