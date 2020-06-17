@@ -72,9 +72,9 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
         QrBill $qrBill,
         string $language,
         TCPDF $tcPdf,
-        string $qrCodeImageFormat = QrCode::FILE_FORMAT_SVG,
         int $offsetX = 0,
-        int $offsetY = 0
+        int $offsetY = 0,
+        string $qrCodeImageFormat = QrCode::FILE_FORMAT_PNG
     ) {
         parent::__construct($qrBill, $language);
         $this->tcPdf = $tcPdf;
@@ -118,15 +118,15 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
         $qrCode = $this->getQrCode();
 
         switch($this->qrCodeImageFormat) {
-            case QrCode::FILE_FORMAT_PNG:
-                $format = QrCode::FILE_FORMAT_PNG;
-                $method = "Image";
-                break;
             case QrCode::FILE_FORMAT_SVG:
-            default:
                 $format = QrCode::FILE_FORMAT_SVG;
                 $method = "ImageSVG";
+                throw new UnsupportedFileExtensionException("At this time, TCPDF doesn't permit to print embedded image in SVG image");
                 break;
+            case QrCode::FILE_FORMAT_PNG:
+            default:
+                $format = QrCode::FILE_FORMAT_PNG;
+                $method = "Image";
         }
 
         $qrCode->setWriterByExtension($format);
