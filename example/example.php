@@ -66,6 +66,9 @@ $qrBill->setPaymentReference(
     )
 );
 
+$qrBill->getQrCode()->writeFile(__DIR__ . '/qr.png');
+$qrBill->getQrCode()->writeFile(__DIR__ . '/qr.svg');
+
 // Example with TCPDF
 $tcPdf = new TCPDF('P', 'mm', 'A4', true, 'ISO-8859-1');
 $tcPdf->setPrintHeader(false);

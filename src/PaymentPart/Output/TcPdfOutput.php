@@ -40,6 +40,8 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
     private const TCPDF_9PT = 3.5;
     private const TCPDF_11PT = 4.8;
 
+    private const SWISS_CROSS_PNG_BASE_64 = "iVBORw0KGgoAAAANSUhEUgAAAKYAAACmAQAAAAB488naAAAARklEQVRIx2P4jwX8YRiBoh8Y0IH9qOjwFOUHxviBUdFR0SEoyo9Uah0YFR0VpZHoYEjro6KjopSIIoFR0VFR6otiASNQFACdq/PI0UugMQAAAABJRU5ErkJggg==";
+
     /** @var  string */
     protected $language;
 
@@ -74,7 +76,7 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
         TCPDF $tcPdf,
         int $offsetX = 0,
         int $offsetY = 0,
-        string $qrCodeImageFormat = QrCode::FILE_FORMAT_PNG
+        string $qrCodeImageFormat = QrCode::FILE_FORMAT_SVG
     ) {
         parent::__construct($qrBill, $language);
         $this->tcPdf = $tcPdf;
@@ -117,11 +119,10 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
     {
         $qrCode = $this->getQrCode();
 
-        switch($this->qrCodeImageFormat) {
+        switch ($this->qrCodeImageFormat) {
             case QrCode::FILE_FORMAT_SVG:
                 $format = QrCode::FILE_FORMAT_SVG;
                 $method = "ImageSVG";
-                throw new UnsupportedFileExtensionException("At this time, TCPDF doesn't permit to print embedded image in SVG image");
                 break;
             case QrCode::FILE_FORMAT_PNG:
             default:
@@ -129,10 +130,21 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
                 $method = "Image";
         }
 
+        $yPosQrCode = 209.5 + $this->offsetY;
+        $xPosQrCode = self::TCPDF_RIGHT_PART_X + 1 + $this->offsetX;
+
         $qrCode->setWriterByExtension($format);
         $img = base64_decode(preg_replace('#^data:image/[^;]+;base64,#', '', $qrCode->writeDataUri()));
-        $this->tcPdf->$method("@".$img, self::TCPDF_RIGHT_PART_X + 1 + $this->offsetX, 209.5 + $this->offsetY, 46, 46);
+        $this->tcPdf->$method("@".$img, $xPosQrCode, $yPosQrCode, 46, 46);
 
+        // In case of SVG image format, write the logo manually because embedded image in an SVG image is not working
+        // in TCPDF library
+        if ($this->qrCodeImageFormat === QrCode::FILE_FORMAT_SVG) {
+            $offsetSwissCross = 19.5; // (half of the qrCode)46/2 - (half of the swiss cross)7/2;
+            $xPosSwissCross = $xPosQrCode + $offsetSwissCross;
+            $yPosSwissCross = $yPosQrCode + $offsetSwissCross;
+            $this->tcPdf->Image("@".base64_decode(self::SWISS_CROSS_PNG_BASE_64), $xPosSwissCross, $yPosSwissCross, 7, 7);
+        }
     }
 
     /**
