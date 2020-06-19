@@ -5,7 +5,7 @@
     "license": "MIT",
     "require": {
         "php": ">=7.1",
-        "sprain/swiss-qr-bill": "^2.9",
+        "sprain/swiss-qr-bill": "^2.10",
         "tecnickcom/tcpdf": "^6.3"
     },
     "require-dev": {
