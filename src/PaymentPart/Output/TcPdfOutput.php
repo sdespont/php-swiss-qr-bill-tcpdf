@@ -290,7 +290,7 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
             $this->tcPdf->SetFont(self::TCPDF_FONT, '', $isReceiptPart ? 8 : 10);
             $this->printMultiCell(
                 str_replace("text.", "", $element->getText()),
-                0,
+                $isReceiptPart ? 54 : 0,
                 0,
                 self::TCPDF_ALIGN_BELOW,
                 self::TCPDF_ALIGN_LEFT
