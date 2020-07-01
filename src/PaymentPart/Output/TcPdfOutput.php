@@ -82,13 +82,14 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
         $this->offsetY = $offsetY;
         $this->qrCodeImageFormat = $qrCodeImageFormat;
     }
-
+    
     /**
-     * @return string
      * @throws UnsupportedFileExtensionException
      */
-    public function getPaymentPart(): string
+    public function getPaymentPart(): void
     {
+        $retainCellHeightRatio = $this->tcPdf->getCellHeightRatio();
+
         $this->tcPdf->SetAutoPageBreak(false);
 
         $this->addPrintableContent();
@@ -105,7 +106,7 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
         $this->addAmountContent();
         $this->addFurtherInformationContent();
 
-        return "OK";
+        $this->tcPdf->setCellHeightRatio($retainCellHeightRatio);
     }
 
     /**
