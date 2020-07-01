@@ -82,7 +82,7 @@ final class TcPdfOutput extends AbstractOutput implements OutputInterface
         $this->offsetY = $offsetY;
         $this->qrCodeImageFormat = $qrCodeImageFormat;
     }
-    
+
     /**
      * @throws UnsupportedFileExtensionException
      */

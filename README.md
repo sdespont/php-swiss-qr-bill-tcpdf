@@ -1,3 +1,5 @@
+# Warning : This feature has been merged into the main project sprain/php-swiss-qr-bill. This repo is deprecated and will no longer receives support.
+
 # Swiss QR Bill
 
 A PHP library to extend ```sprain/php-swiss-qr-bill``` in order to create PDF payment slips with TCPDF library.
